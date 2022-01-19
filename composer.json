@@ -1,0 +1,19 @@
+{
+    "name": "sumra/sdk",
+    "description": "Microservices SDK. Utilities, Traits, Responses, etc",
+    "type": "library",
+    "require": {},
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ihor Porokhnenko",
+            "email": "ihor.porokhnenko@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Sumra\\SDK\\": "src"
+        }
+    }
+}
