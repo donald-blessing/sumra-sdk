@@ -5,7 +5,7 @@ namespace Sumra\SDK\Traits\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-trait ResponseItemsData
+trait CollectionItemsData
 {
     public static function transform($data, $columnsMap, $withObject = false)
     {

@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-trait ResponseItemData
+trait CollectionItemData
 {
     public static function transform($data, $columnsMap, $withObject = false)
     {
         if (!$data instanceof Collection){
-            return ResponseItemsData::transform($data, $columnsMap, $withObject);
+            return CollectionItemsData::transform($data, $columnsMap, $withObject);
         }
 
         // Transform items collection
