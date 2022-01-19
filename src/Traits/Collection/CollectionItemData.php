@@ -1,6 +1,6 @@
 <?php
 
-namespace Sumra\SDK\Traits\Response;
+namespace Sumra\SDK\Traits\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
