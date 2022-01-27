@@ -47,6 +47,6 @@ trait HasCurrency
      */
     public function getCurrencyCode()
     {
-        return $this->getCurrency()->getCode();
+        return $this->getCurrency()->code;
     }
 }
