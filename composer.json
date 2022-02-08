@@ -2,7 +2,9 @@
     "name": "sumra/sdk",
     "description": "Microservices SDK. Utilities, Traits, Responses, etc",
     "type": "library",
-    "require": {},
+    "require": {
+        "flipbox/lumen-generator": "^8.2"
+    },
     "license": "MIT",
     "authors": [
         {
