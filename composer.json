@@ -3,7 +3,8 @@
     "description": "Microservices SDK. Utilities, Traits, Responses, etc",
     "type": "library",
     "require": {
-        "flipbox/lumen-generator": "^8.2"
+        "flipbox/lumen-generator": "~8",
+        "fruitcake/laravel-cors": "~2"
     },
     "license": "MIT",
     "authors": [
