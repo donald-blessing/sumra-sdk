@@ -3,6 +3,7 @@
     "description": "Microservices SDK. Utilities, Traits, Responses, etc",
     "type": "library",
     "require": {
+        "darkaonline/swagger-lume": "~8",
         "flipbox/lumen-generator": "~8",
         "fruitcake/laravel-cors": "~2"
     },
