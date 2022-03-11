@@ -1,11 +1,12 @@
 {
     "name": "sumra/sdk",
-    "description": "Microservices SDK. Utilities, Traits, Responses, etc",
+    "description": "Microservices SDK. Utilities, Traits, Responses, Data exchange, etc",
     "type": "library",
     "require": {
         "darkaonline/swagger-lume": "~8",
         "flipbox/lumen-generator": "~8",
-        "fruitcake/laravel-cors": "~2"
+        "fruitcake/laravel-cors": "~2",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "~11"
     },
     "license": "MIT",
     "authors": [
