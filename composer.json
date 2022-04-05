@@ -7,7 +7,7 @@
         "doctrine/dbal": "~3",
         "flipbox/lumen-generator": "~8",
         "fruitcake/laravel-cors": "~2",
-        "guzzlehttp/guzzle": "~6|~7",
+        "guzzlehttp/guzzle": "~5|~6|~7",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "~11"
     },
     "license": "MIT",
