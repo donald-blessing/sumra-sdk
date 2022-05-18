@@ -19,10 +19,8 @@ class PubSubServiceProvider extends ServiceProvider
             class_alias('\Sumra\SDK\Facades\PubSub', 'PubSub');
         }
 
-        // TODO change after development
-        $basePath = base_path('vendor/sumra/pubsub/database/migrations');
-        $this->loadMigrationsFrom($basePath);
-        //$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        // Load migration
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         /*$this->publishes([
             __DIR__ . '../config/pubsub.php' => config_path('pubsub.php'),
