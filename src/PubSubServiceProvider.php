@@ -15,6 +15,7 @@ class PubSubServiceProvider extends ServiceProvider
     }
 
     public function boot() {
+        // Init Pubsub facade object
         if (!class_exists('PubSub')) {
             class_alias('\Sumra\SDK\Facades\PubSub', 'PubSub');
         }
@@ -22,10 +23,12 @@ class PubSubServiceProvider extends ServiceProvider
         // Load migration
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        /*$this->publishes([
-            __DIR__ . '../config/pubsub.php' => config_path('pubsub.php'),
-        ]);*/
+        // Publish config file
+//        $this->publishes([
+//            __DIR__ . '../config/pubsub.php' => config_path('pubsub.php'),
+//        ]);
 
+        // Merge config
         $this->mergeConfigFrom(
             __DIR__ . '/../config/pubsub.php', 'pubsub'
         );
