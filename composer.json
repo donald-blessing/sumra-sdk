@@ -1,8 +1,9 @@
 {
     "name": "sumra/sdk",
-    "description": "Microservices SDK. Utilities, Traits, Responses, Data exchange, etc",
+    "description": "Microservices SDK. Utilities, Traits, Responses, Data exchange, Logging, etc",
     "type": "library",
     "require": {
+        "php": "^8.0",
         "darkaonline/swagger-lume": "~8",
         "doctrine/dbal": "~3",
         "flipbox/lumen-generator": "~8",

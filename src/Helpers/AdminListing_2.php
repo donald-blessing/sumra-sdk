@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace Sumra\SDK\Helpers;
 
 use Sumra\SDK\Exceptions\NotAModelClassException;
 use Exception;
