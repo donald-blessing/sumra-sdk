@@ -15,6 +15,10 @@ class AbstractMessage extends Model
     ];
 
     protected $fillable = [
-        'uniq_id', 'queue', 'event', 'message', 'properties'
+        'uniq_id',
+        'queue',
+        'event',
+        'message',
+        'properties'
     ];
 }

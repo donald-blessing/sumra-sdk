@@ -17,17 +17,17 @@ class AdminListing_1
     /**
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * @var Builder
      */
-    protected $query;
+    protected Builder $query;
 
     /**
      * @var int
      */
-    protected $currentPage;
+    protected int $currentPage;
 
     /**
      * @var int
@@ -42,12 +42,12 @@ class AdminListing_1
     /**
      * @var bool
      */
-    protected $hasPagination = false;
+    protected bool $hasPagination = false;
 
     /**
      * @var string
      */
-    protected $orderBy;
+    protected string $sortBy;
 
     /**
      * @var string

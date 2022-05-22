@@ -112,9 +112,9 @@ class AdminListing
      * This method does not perform any authorization nor validation.
      *
      * @param \Illuminate\Http\Request $request
-     * @param array|string[]           $columns
-     * @param array|null               $searchIn  array of columns which should be searched in (only text, character varying or primary key are allowed)
-     * @param callable|null            $modifyQuery
+     * @param array|string[] $columns
+     * @param array|null $searchIn array of columns which should be searched in (only text, character varying or primary key are allowed)
+     * @param callable|null $modifyQuery
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection The result is either LengthAwarePaginator (when pagination was attached) or simple Collection otherwise
      */
@@ -173,8 +173,8 @@ class AdminListing
     /**
      * Attach the searching functionality
      *
-     * @param string $search   searched string
-     * @param array  $searchIn array of columns which should be searched in (only text, character varying or primary key are allowed)
+     * @param string $search searched string
+     * @param array $searchIn array of columns which should be searched in (only text, character varying or primary key are allowed)
      *
      * @return $this
      */
