@@ -6,7 +6,7 @@
         "php": "^8.0",
         "darkaonline/swagger-lume": "~9",
         "doctrine/dbal": "~3",
-        "flipbox/lumen-generator": "~8",
+        "flipbox/lumen-generator": "~9",
         "fruitcake/laravel-cors": "~2",
         "guzzlehttp/guzzle": "~5|~6|~7",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "~11"
