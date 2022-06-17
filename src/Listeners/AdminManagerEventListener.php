@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Listeners;
+namespace Sumra\SDK\Listeners;
 
-use App\Events\NewUserRegistered;
-use App\Models\Admin;
+use Sumra\SDK\Models\Admin;
 
 
 class AdminManagerEventListener
@@ -59,7 +58,7 @@ class AdminManagerEventListener
                     'role' => $role,
                 ]);
         }
-        
+
         if ($action === 'delete') {
             Admin::query()->find($id)
                 ->delete();
