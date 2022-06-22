@@ -4,6 +4,7 @@ namespace Sumra\SDK;
 
 use App;
 use Illuminate\Support\ServiceProvider;
+use Sumra\SDK\Console\PublishSettingsConfigCommand;
 
 class PubSubServiceProvider extends ServiceProvider
 {
@@ -11,6 +12,18 @@ class PubSubServiceProvider extends ServiceProvider
     {
         App::singleton('PubSub', function(){
             return new PubSub();
+        });
+
+        /**
+         * Command
+        */
+        $this->commands('command.sumra.publish');
+
+        /**
+         * Command handler
+         */
+        $this->app->singleton('command.sumra.publish', function () {
+            return new PublishSettingsConfigCommand();
         });
     }
 
@@ -27,6 +40,7 @@ class PubSubServiceProvider extends ServiceProvider
 //        $this->publishes([
 //            __DIR__ . '../config/pubsub.php' => config_path('pubsub.php'),
 //        ]);
+
 
         // Merge config
         $this->mergeConfigFrom(
