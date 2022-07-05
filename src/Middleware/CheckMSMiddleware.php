@@ -18,7 +18,7 @@ class CheckMSMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (MicroservicesEnums::checkMicroservice($request->header('app-id', null))) {
+        if (!MicroservicesEnums::checkMicroservice($request->header('app-id', null))) {
             return response()->jsonApi([
                 'type' => 'danger',
                 'title' => 'Access error',
