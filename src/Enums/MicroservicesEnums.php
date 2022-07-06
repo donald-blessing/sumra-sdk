@@ -14,5 +14,4 @@ final class MicroservicesEnums
             self::GLOBAL_IDENTITY_CENTER
         ]);
     }
-
 }
