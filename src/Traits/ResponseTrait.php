@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Sumra\SDK\Traits;
 
 /**
  *
@@ -20,7 +20,7 @@ trait ResponseTrait
             'last_item' => $paginator->lastItem(),
         ];
 
-        return response([
+        return response()->jsonApi([
             'type' => 'success',
             'message' => $message,
             'data' => $paginator->items(),
@@ -30,7 +30,7 @@ trait ResponseTrait
 
     public function createdResponse($message, $data)
     {
-        return response([
+        return response()->jsonApi([
             'type' => 'success',
             'message' => $message,
             'data' => $data
@@ -39,7 +39,7 @@ trait ResponseTrait
 
     public function errorResponse($message)
     {
-        return response([
+        return response()->jsonApi([
             'type' => 'danger',
             'message' => $message
         ], 500);
@@ -47,7 +47,7 @@ trait ResponseTrait
 
     public function okResponse($title, $message, $data = null)
     {
-        return response([
+        return response()->jsonApi([
             'type' => 'success',
             'title' => $title,
             'message' => $message,
