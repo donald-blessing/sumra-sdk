@@ -2,15 +2,12 @@
 
 namespace Sumra\SDK;
 
-use App\Api\V1\Resources\CategoryResource;
-use App\Model\GetIp;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use JsonSerializable;
 use Traversable;
 
 class JsonApiResponse extends JsonResponse
@@ -20,10 +17,10 @@ class JsonApiResponse extends JsonResponse
     /**
      * JsonApiResponse constructor.
      *
-     * @param null  $data
-     * @param int   $status
+     * @param null $data
+     * @param int $status
      * @param array $headers
-     * @param int   $options
+     * @param int $options
      */
     public function __construct($data = null, $status = 200, $headers = [], $options = 0)
     {
@@ -51,67 +48,63 @@ class JsonApiResponse extends JsonResponse
      *
      * @return mixed
      */
-    public function serializeData($data)
+    protected function serializeData($data)
     {
-        /*$output = [
-            'code' => $this->getStatusCode(),
-        ];*/
+        // If input data of Model
+        if ($data instanceof Model) {
+            $output = [
+                'data' => $this->serializeModel($data)
+            ];
 
-        if (is_array($data) && isset($data['error'])) {
-            if ($data['error'] instanceof JsonSerializable) {
-                $error = $data['error']->jsonSerialize();
-                $error['status'] = $this->getStatusCode();
-                $output['errors'] = [$error];
-
-                return $output;
-            }
-
-            if (is_string($data['error'])) {
-                $output['status'] = !is_int($this->getStatusCode()) ? $this->getStatusCode() : false;
-                $output['error']['message'] = $data['error'];
-
-                return $output;
-            }
-        } elseif (is_array($data) && isset($data['errors'])) {
-            if ($data['errors'] instanceof JsonSerializable) {
-                $error = $data['error']->jsonSerialize();
-                $error['status'] = $this->getStatusCode();
-                $output['errors'] = [$error];
-
-                return $output;
-            }
-
-            if (is_string($data['errors'])) {
-                $output['errors']['message'] = $data['errors'];
-                $output['status'] = !is_int($this->getStatusCode()) ? $this->getStatusCode() : false;
-
-                return $output;
-            }
-        } elseif ($data instanceof Model) {
-            $output['data'] = $this->serializeModel($data);
-
-            return $this->mergeIncluded($output);
-        } elseif ($data instanceof AbstractPaginator) {
-            return $this->serializePaginator($data);
-
-        } elseif (is_array($data) || $data instanceof Traversable) {
-            if (isset($data['data'])) {
-                if ($data['data'] instanceof LengthAwarePaginator) {
-                    // fix problem with pagination
-                    $output = $this->serializeData($data['data']);
-                    $output['success'] = true;
-
-                    return $this->mergeIncluded($output);
-                }
-
-                $output = $this->serializeCollection($data);
-            } else {
-                $output['data'] = $this->serializeCollection($data);
-            }
+            $output = $this->setResponseInfo($output, $data);
 
             return $this->mergeIncluded($output);
         }
 
+        // If input data of Paginator
+        if ($data instanceof AbstractPaginator) {
+            $output = $this->serializePaginator($data);
+
+            return $this->setResponseInfo($output, $data);
+        }
+
+        // If simple array or Traversable class
+        if (is_array($data) || $data instanceof Traversable) {
+            // If input has 'data' key and object
+            if (isset($data['data'])) {
+                if ($data['data'] instanceof Collection) {
+                    $data['data'] = $this->serializeCollection($data['data']);
+                }
+
+                // fix problem with pagination
+                if ($data['data'] instanceof AbstractPaginator) {
+                    $output = $this->serializePaginator($data['data']);
+                    $output = array_merge($data, $output);
+
+                    $output = $this->setResponseInfo($output, $data);
+
+                    $data = $output;
+                }
+            } else {
+                // Processing a simple array of data
+                $output = $this->serializeCollection($data);
+
+                // If inputed data is collection then transform
+                if ($data instanceof Collection) {
+                    $output = [
+                        'data' => $output
+                    ];
+
+                    $output = $this->setResponseInfo($output, $data);
+                }
+
+                $data = $output;
+            }
+
+            return $this->mergeIncluded($data);
+        }
+
+        // Return inputed data, e.g. string
         return $data;
     }
 
@@ -122,7 +115,7 @@ class JsonApiResponse extends JsonResponse
      *
      * @return array
      */
-    public function serializeModel(Model $data): array
+    protected function serializeModel(Model $data): array
     {
         // TODO
         $attributes = $data->attributesToArray();
@@ -150,6 +143,7 @@ class JsonApiResponse extends JsonResponse
                 if (is_iterable($relation)) {
                     foreach ($this->serializeCollection($relation) as $key => $temp) {
                         $this->addInclude($temp);
+
                         $result['relationships'][$key]['data'][] = [
                             'type' => $temp['type'],
                             'id' => $temp['id'],
@@ -157,14 +151,14 @@ class JsonApiResponse extends JsonResponse
                     }
                 } elseif ($relation instanceof Model) {
                     $temp = $this->serializeModel($relation);
-                    // $this->included[$key][] = $temp;
+
                     $this->addInclude($temp);
+
                     $result['relationships'][$key]['data'] = [
                         'type' => $temp['type'],
                         'id' => $temp['id'],
                     ];
                 } elseif ($relation) {
-                    //$this->included[$key][] = $relation;
                     $this->addInclude($relation);
                 }
             }
@@ -180,9 +174,10 @@ class JsonApiResponse extends JsonResponse
      *
      * @return array
      */
-    public function serializeCollection(iterable $collection): array
+    protected function serializeCollection(iterable $collection): array
     {
         $result = [];
+
         foreach ($collection as $key => $item) {
             if (is_iterable($item)) {
                 $result[$key] = $this->serializeCollection($item);
@@ -196,10 +191,6 @@ class JsonApiResponse extends JsonResponse
         return $result;
     }
 
-    /*protected function addIncludeScalar($type, $include) {
-        $this->included[$type]
-    }*/
-
     /**
      * @param $include
      *
@@ -210,6 +201,7 @@ class JsonApiResponse extends JsonResponse
     {
         $type = $include['type'];
         $id = $include['id'];
+
         if (!array_key_exists($type, $this->included) || !array_key_exists($id, $this->included[$type])) {
             $this->included[$type][$id] = $include;
         } else {
@@ -237,66 +229,85 @@ class JsonApiResponse extends JsonResponse
 
     /**
      * @param AbstractPaginator $paginator
-     *
      * @return array
      */
-    public function serializePaginator(AbstractPaginator $paginator): array
+    protected function serializePaginator(AbstractPaginator $paginator): array
     {
-        /*$result= [
-            'current_page' => $paginator->currentPage(),
-            //'data' => $paginator->items->toArray(),
-            //'data' => $this->serializeData($paginator->items()),
-            'first_page_url' => $paginator->url(1),
-            'from' => $paginator->firstItem(),
-            'last_page' => $paginator->lastPage(),
-            'last_page_url' => $paginator->url($paginator->lastPage()),
-            'next_page_url' => $paginator->nextPageUrl(),
-            'path' => $paginator->path(),
-            'per_page' => $paginator->perPage(),
-            'prev_page_url' => $paginator->previousPageUrl(),
-            'to' => $paginator->lastItem(),
-            'total' => $paginator->total(),
-        ];*/
-
-        $links = [
-            'links' => [
-                'current_page'=>$paginator->currentPage(),
+        return [
+            'data' => $this->serializeData($paginator->items()),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
                 'per_page' => $paginator->perPage(),
-                'total' => $paginator->count(),
-                'first' => [
-                    'href' => $paginator->url(1),
-                    'meta' => [
-                        'page' => 1,
-                    ]
-                ],
-                'last' => [
-                    'href' => $paginator->url($paginator->lastPage()),
-                    'meta' => [
-                        'page' => $paginator->lastPage(),
-                    ]
-                ],
+                'total' => $paginator->total(),
+                'path' => $paginator->path(),
+                'first_item' => $paginator->firstItem(),
+                'last_item' => $paginator->lastItem(),
+
                 'prev' => $paginator->currentPage() > 1 ? [
                     'href' => $paginator->previousPageUrl(),
-                    'meta' => [
-                        'page' => $paginator->currentPage() - 1
-                    ]
+                    'page' => $paginator->currentPage() - 1
                 ] : null,
+
+                'first' => [
+                    'href' => $paginator->url(1),
+                    'page' => 1
+                ],
+
+                'links' => $paginator->links(),
+
+                'last' => [
+                    'href' => $paginator->url($paginator->lastPage()),
+                    'page' => $paginator->lastPage()
+                ],
+
                 'next' => $paginator->lastPage() > $paginator->currentPage() ? [
                     'href' => $paginator->nextPageUrl(),
-                    'meta' => [
-                        'page' => $paginator->currentPage() + 1
-                    ]
+                    'page' => $paginator->currentPage() + 1
                 ] : null,
             ]
         ];
-
-        $output = $this->serializeData($paginator->items());
-
-        return array_merge($links, $output);
     }
 
-    public function serializeResource($resource)
+    /**
+     * @param $output
+     * @param $data
+     * @return array
+     */
+    protected function setResponseInfo($output, $data): array
     {
+        if (!isset($output['message']) || (is_array($data) && !isset($data['message']))) {
+            $output = array_merge(['message' => ''], $output);
+        }
 
+        if (!isset($output['title']) || (is_array($data) && !isset($data['title']))) {
+            $output = array_merge(['title' => ''], $output);
+        }
+
+        if (!isset($output['type']) || (is_array($data) && !isset($data['type']))) {
+            $code = $this->getStatusCode();
+
+            switch ($code){
+                case 200:
+                case 201:
+                    $type = 'success';
+                    break;
+
+                case 400:
+                case 401:
+                case 500:
+                    $type = 'danger';
+                    break;
+
+                case 404:
+                case 405:
+                case 422:
+                    $type = 'warning';
+                    break;
+            }
+
+            $output = array_merge(['type' => $type], $output);
+        }
+
+        return $output;
     }
 }
