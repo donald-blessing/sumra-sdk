@@ -81,9 +81,7 @@ class JsonApiResponse extends JsonResponse
                     $output = $this->serializePaginator($data['data']);
                     $output = array_merge($data, $output);
 
-                    $output = $this->setResponseInfo($output, $data);
-
-                    $data = $output;
+                    $data = $this->setResponseInfo($output, $data);
                 }
             } else {
                 // Processing a simple array of data
@@ -94,11 +92,9 @@ class JsonApiResponse extends JsonResponse
                     $output = [
                         'data' => $output
                     ];
-
-                    $output = $this->setResponseInfo($output, $data);
                 }
 
-                $data = $output;
+                $data = $this->setResponseInfo($output, $data);
             }
 
             return $this->mergeIncluded($data);
