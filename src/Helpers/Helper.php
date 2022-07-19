@@ -8,7 +8,11 @@ namespace Sumra\SDK\Helpers;
  */
 class Helper
 {
-    public static function setApiUrlPath($slug = null): array|string|null
+    /**
+     * @param null $slug
+     * @return array|string|null
+     */
+    public static function setApiUrlPath($slug = null): null|array|string
     {
         return preg_replace('!/+!', '/', sprintf(
             "/%s/%s/%s",
@@ -16,5 +20,18 @@ class Helper
             env('APP_API_VERSION', ''),
             $slug
         ));
+    }
+
+    /**
+     * @param null $slug
+     * @return mixed
+     */
+    public static function getConfig($slug = null): mixed
+    {
+        if(is_null($slug)){
+            return [];
+        }
+
+        return require __DIR__ . "/../../config/{$slug}.php";
     }
 }
