@@ -5,6 +5,7 @@ namespace Sumra\SDK;
 use App;
 use Illuminate\Support\ServiceProvider;
 use Sumra\SDK\Console\PublishSettingsConfigCommand;
+use Sumra\SDK\Services\PubSub;
 
 class PubSubServiceProvider extends ServiceProvider
 {

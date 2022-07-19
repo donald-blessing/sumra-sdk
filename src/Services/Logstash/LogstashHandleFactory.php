@@ -1,11 +1,11 @@
 <?php
 
-namespace Sumra\SDK\Factories;
+namespace Sumra\SDK\Services\Logstash;
 
+use Exception;
+use Monolog\Formatter\LogstashFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Sumra\SDK\Formatter\LogstashFormatter;
-use Sumra\SDK\Processor\RequestIdProcessor;
 
 class LogstashHandleFactory
 {
@@ -16,7 +16,7 @@ class LogstashHandleFactory
      * @param string|string $stream
      * @param int|int $level
      * @return StreamHandler
-     * @throws \Exception
+     * @throws Exception
      */
     public function createStreamHandler(string $type = 'stream', string $stream = 'php://stdout', int $level = Logger::ERROR): StreamHandler
     {

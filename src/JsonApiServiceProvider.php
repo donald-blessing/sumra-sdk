@@ -6,6 +6,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Http\ResponseFactory;
 use Sumra\SDK\Exceptions\Handler;
+use Sumra\SDK\Services\JsonApiResponse;
 
 /**
  * Class JsonApiServiceProvider

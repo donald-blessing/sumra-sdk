@@ -1,6 +1,6 @@
 <?php
 
-namespace Sumra\SDK;
+namespace Sumra\SDK\Services;
 
 use App\Models\User;
 use Exception;
@@ -23,7 +23,6 @@ class AdminManager
             throw new Exception('User does not exist');
         }
 
-
         PubSub::transaction(function () use ($validated, &$admin) {
 
         })->publish('AdminManagerEvent', [
@@ -32,7 +31,6 @@ class AdminManager
             'service' => $validated['service'],
             'action' => 'store',
         ], 'service_admin');
-
     }
 
     /**
@@ -59,9 +57,7 @@ class AdminManager
             'service' => $validated['service'],
             'action' => 'update',
         ], 'service_admin');
-
     }
-
 
     /**
      * @param array $request
@@ -79,7 +75,6 @@ class AdminManager
             throw new Exception('User does not exist');
         }
 
-
         PubSub::transaction(function () {
 
         })->publish('AdminManagerEvent', [
@@ -87,6 +82,5 @@ class AdminManager
             'service' => $validated['service'],
             'action' => 'delete',
         ], 'service_admin');
-
     }
 }

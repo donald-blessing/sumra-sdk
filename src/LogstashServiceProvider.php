@@ -4,10 +4,11 @@ namespace Sumra\SDK;
 
 use Illuminate\Support\ServiceProvider;
 use Monolog\Logger;
-use Sumra\SDK\Factories\LogstashHandleFactory;
+use Sumra\SDK\Services\Logstash\LogstashHandleFactory;
 
 /**
  * Class LogstashServiceProvider
+ *
  * Package for logstash logging
  *
  * @package Sumra\SDK

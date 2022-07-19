@@ -4,11 +4,8 @@ namespace Sumra\SDK\Listeners;
 
 use Sumra\SDK\Models\Admin;
 
-
 class AdminManagerEventListener
 {
-
-
     /**
      * Create the event listener.
      *
@@ -63,6 +60,5 @@ class AdminManagerEventListener
             Admin::query()->find($id)
                 ->delete();
         }
-
     }
 }
