@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\AbstractPaginator;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Traversable;
 
@@ -38,8 +37,13 @@ class JsonApiResponse extends JsonResponse
      */
     public function setData($data = [])
     {
+        // Serialize data
         $data = $this->serializeData($data);
 
+        // Check and add response info
+        $data = $this->setResponseInfo($data);
+
+        // Set data to parrent response
         return parent::setData($data);
     }
 
@@ -56,47 +60,32 @@ class JsonApiResponse extends JsonResponse
                 'data' => $this->serializeModel($data)
             ];
 
-            $output = $this->setResponseInfo($output, $data);
-
             return $this->mergeIncluded($output);
         }
 
         // If input data of Paginator
         if ($data instanceof AbstractPaginator) {
-            $output = $this->serializePaginator($data);
-
-            return $this->setResponseInfo($output, $data);
+            return $this->serializePaginator($data);
         }
 
         // If simple array or Traversable class
         if (is_array($data) || $data instanceof Traversable) {
-            // If input has 'data' key and object
-            if (isset($data['data'])) {
-                if ($data['data'] instanceof Collection) {
-                    $data['data'] = $this->serializeCollection($data['data']);
-                }
-
-                // fix problem with pagination
-                if ($data['data'] instanceof AbstractPaginator) {
-                    $output = $this->serializePaginator($data['data']);
-                    $output = array_merge($data, $output);
-
-                    $data = $this->setResponseInfo($output, $data);
-                }
-            } else {
-                // Processing a simple array of data
-                $output = $this->serializeCollection($data);
-
-                // If inputed data is collection then transform
-                if ($data instanceof Collection) {
-                    $output = [
-                        'data' => $output
-                    ];
-                }
-
-                $data = $this->setResponseInfo($output, $data);
+            // Wrap to data atribute if input has 'data' key and object
+            if (!isset($data['data']) && ($data instanceof Collection || $data instanceof AbstractPaginator)) {
+                $data = [
+                    'data' => $data
+                ];
             }
 
+            // fix problem with pagination
+            if (isset($data['data']) && $data['data'] instanceof AbstractPaginator) {
+                $data = array_merge($data, $this->serializePaginator($data['data']));
+            }
+
+            // Processing array of data
+            $data = $this->serializeCollection($data);
+
+            // Add included and return
             return $this->mergeIncluded($data);
         }
 
@@ -191,7 +180,6 @@ class JsonApiResponse extends JsonResponse
      * @param $include
      *
      * @todo
-     *
      */
     protected function addInclude($include)
     {
@@ -269,20 +257,20 @@ class JsonApiResponse extends JsonResponse
      * @param $data
      * @return array
      */
-    protected function setResponseInfo($output, $data): array
+    protected function setResponseInfo($output): array
     {
-        if (!isset($output['message']) || (is_array($data) && !isset($data['message']))) {
+        if (!isset($output['message'])) {
             $output = array_merge(['message' => ''], $output);
         }
 
-        if (!isset($output['title']) || (is_array($data) && !isset($data['title']))) {
+        if (!isset($output['title'])) {
             $output = array_merge(['title' => ''], $output);
         }
 
-        if (!isset($output['type']) || (is_array($data) && !isset($data['type']))) {
+        if (!isset($output['type'])) {
             $code = $this->getStatusCode();
 
-            switch ($code){
+            switch ($code) {
                 case 200:
                 case 201:
                     $type = 'success';
@@ -299,6 +287,8 @@ class JsonApiResponse extends JsonResponse
                 case 422:
                     $type = 'warning';
                     break;
+                default:
+                    $type = 'info';
             }
 
             $output = array_merge(['type' => $type], $output);
