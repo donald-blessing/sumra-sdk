@@ -8,15 +8,12 @@ use Sumra\SDK\Services\AdminManager;
 
 class AdminManagerServiceProvider extends ServiceProvider
 {
-
-
     /**
      * Register the application services.
      *
      * @return void
      */
     public function register()
-
     {
         App::singleton('AdminManager', function () {
             return new AdminManager();

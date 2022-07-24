@@ -15,13 +15,15 @@ class CreateSubscriberMessagesTable extends Migration
     {
         Schema::create('subscriber_messages', function (Blueprint $table) {
             $table->bigIncrements('id');
+
             $table->string('uniq_id');
             $table->string('queue');
+            $table->string('exchange');
             $table->string('event');
             $table->mediumText('message');
-            //$table->string('exchange');
             $table->text('properties')->nullable();
             $table->tinyInteger('status')->default(0);
+
             $table->timestamps();
         });
     }

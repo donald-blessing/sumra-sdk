@@ -22,6 +22,7 @@ class JsonApiServiceProvider extends ServiceProvider
             Handler::class
         );
 
+        // Add new method to Response
         ResponseFactory::macro('jsonApi', function ($data = null, $status = 200, $headers = [], $options = 0) {
             return new JsonApiResponse($data, $status, $headers, $options);
         });

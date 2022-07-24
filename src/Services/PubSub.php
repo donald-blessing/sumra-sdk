@@ -38,7 +38,7 @@ class PubSub
     /**
      * @var bool
      */
-    public $transaction;
+    public bool $transaction = false;
 
     /**
      * PubSub constructor.
@@ -62,12 +62,14 @@ class PubSub
     public function transaction(callable $callback)
     {
         $this->transaction = true;
+
         DB::beginTransaction();
 
         try {
             $callback();
         } catch (Exception $e) {
             DB::rollBack();
+
             throw $e;
         }
 
@@ -81,8 +83,7 @@ class PubSub
      * @param $event
      * @param $message
      * @param null $queue
-     *
-     * @throws Exception
+     * @param null $exchange
      */
     public function publish($event, $message, $queue, $exchange = null)
     {
@@ -90,16 +91,19 @@ class PubSub
             $model = new $this->publisherModelClass;
             $model->uniq_id = uniqid('', true);
             $model->queue = $queue;
+            $model->exchange = $exchange ?? $queue;
             $model->event = $event;
             $model->message = $message;
             $model->save();
-            if (!empty($this->transaction)) {
+
+            if ($this->transaction) {
                 DB::commit();
             }
         } catch (Exception $e) {
-            if (!empty($this->transaction)) {
+            if ($this->transaction) {
                 DB::rollBack();
             }
+
             throw $e;
         }
 
@@ -123,6 +127,7 @@ class PubSub
         try {
             $message = $this->subscriberModelClass::where('uniq_id', $job->data['uniq_id'])->first();
             $time = time();
+
             if (empty($message)) {
                 $message = new $this->subscriberModelClass();
                 $message->fill($job->data);
@@ -139,11 +144,12 @@ class PubSub
 
             $message->save();
 
-            if ($message->status != 6)
+            if ($message->status != 6) {
                 event($message->event, [$message->message]);
-
+            }
         } catch (Exception $e) {
             $job->getJob()->markAsFailed();
+
             throw $e;
         }
     }

@@ -23,9 +23,7 @@ class AdminManager
             throw new Exception('User does not exist');
         }
 
-        PubSub::transaction(function () use ($validated, &$admin) {
-
-        })->publish('AdminManagerEvent', [
+        PubSub::publish('AdminManagerEvent', [
             'admin' => $admin,
             'role' => $validated['role'],
             'service' => $validated['service'],
@@ -49,9 +47,7 @@ class AdminManager
             throw new Exception('User does not exist');
         }
 
-        PubSub::transaction(function () {
-
-        })->publish('AdminManagerEvent', [
+        PubSub::publish('AdminManagerEvent', [
             'admin' => $admin,
             'role' => $validated['role'],
             'service' => $validated['service'],
@@ -75,9 +71,7 @@ class AdminManager
             throw new Exception('User does not exist');
         }
 
-        PubSub::transaction(function () {
-
-        })->publish('AdminManagerEvent', [
+        PubSub::publish('AdminManagerEvent', [
             'admin' => $admin,
             'service' => $validated['service'],
             'action' => 'delete',

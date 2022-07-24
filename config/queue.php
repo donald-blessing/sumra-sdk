@@ -95,25 +95,14 @@ return [
             ],
 
             'options' => [
-                'exchange' => [
-
-                    'name' => env('RABBITMQ_EXCHANGE_NAME'),
-
-                    /**
-                     * Determine if exchange should be created if it does not exist.
-                     */
-                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
-
-                    /**
-                     * Read more about possible values at https://www.rabbitmq.com/tutorials/amqp-concepts.html
-                     */
-                    //  'type' => env('RABBITMQ_EXCHANGE_TYPE', \Interop\Amqp\AmqpTopic::TYPE_DIRECT),
-                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
-                    'durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
-                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
-                    'arguments' => env('RABBITMQ_EXCHANGE_ARGUMENTS'),
+                'ssl_options' => [
+                    'ssl_on' => env('RABBITMQ_SSL', false),
+                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
+                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
+                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
+                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
+                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
                 ],
-
                 'queue' => [
                     'job' => VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob::class,
 
@@ -136,18 +125,22 @@ return [
                     'auto_delete' => env('RABBITMQ_QUEUE_AUTODELETE', false),
                     'arguments' => env('RABBITMQ_QUEUE_ARGUMENTS'),
                 ],
+                'exchange' => [
+                    'name' => env('RABBITMQ_EXCHANGE_NAME'),
 
-                /*
-                 * Optional SSL params if an SSL connection is used
-                 * Using an SSL connection will also require to configure your RabbitMQ to enable SSL. More details can be founds here: https://www.rabbitmq.com/ssl.html
-                 */
-                'ssl_options' => [
-                    'ssl_on' => env('RABBITMQ_SSL', false),
-                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
-                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
-                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
-                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
-                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                    /**
+                     * Determine if exchange should be created if it does not exist.
+                     */
+                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+
+                    /**
+                     * Read more about possible values at https://www.rabbitmq.com/tutorials/amqp-concepts.html
+                     */
+                    //  'type' => env('RABBITMQ_EXCHANGE_TYPE', \Interop\Amqp\AmqpTopic::TYPE_DIRECT),
+                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
+                    'durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
+                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
+                    'arguments' => env('RABBITMQ_EXCHANGE_ARGUMENTS'),
                 ],
             ],
 

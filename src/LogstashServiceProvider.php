@@ -52,7 +52,6 @@ class LogstashServiceProvider extends ServiceProvider
 
         //    return $monolog;
         //});
-
     }
 
     /*public function getRotatingLogHandler($maxFiles = 7)
@@ -60,14 +59,4 @@ class LogstashServiceProvider extends ServiceProvider
         return (new RotatingFileHandler(storage_path('logs/lumen.log'), $maxFiles))
             ->setFormatter(new LineFormatter(null, null, true, true));
     }*/
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
 }
