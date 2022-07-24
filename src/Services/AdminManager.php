@@ -4,6 +4,7 @@ namespace Sumra\SDK\Services;
 
 use App\Models\User;
 use Exception;
+use Sumra\SDK\Enums\ServicesEnums;
 
 class AdminManager
 {
@@ -11,7 +12,7 @@ class AdminManager
      * @param array $request
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function addAdmin(array $request): void
     {
@@ -37,7 +38,7 @@ class AdminManager
      * @param array $request
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateAdmin(array $request): void
     {
@@ -63,7 +64,7 @@ class AdminManager
      * @param array $request
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function removeAdmin(array $request): void
     {
@@ -82,5 +83,13 @@ class AdminManager
             'service' => $validated['service'],
             'action' => 'delete',
         ], 'service_admin');
+    }
+
+    /**
+     * @return array
+     */
+    public function getServices(): array
+    {
+        return ServicesEnums::getServices();
     }
 }
