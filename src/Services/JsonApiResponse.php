@@ -40,6 +40,15 @@ class JsonApiResponse extends JsonResponse
         // Serialize data
         $data = $this->serializeData($data);
 
+        if(isset($data['errors'])){
+            $error = collect($data['errors'])->first();
+
+            $data['title'] = $error['title'];
+            $data['message'] = $error['message'];
+
+            unset($data['errors']);
+        }
+
         // Check and add response info
         $data = $this->setResponseInfo($data);
 
@@ -287,6 +296,7 @@ class JsonApiResponse extends JsonResponse
                 case 422:
                     $type = 'warning';
                     break;
+
                 default:
                     $type = 'info';
             }
