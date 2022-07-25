@@ -4,7 +4,7 @@ namespace Sumra\SDK;
 
 use App\Models\User;
 use Exception;
-use Sumra\SDK\Enums\ServicesEnums;
+use Sumra\SDK\Enums\MicroservicesEnums;
 
 class AdminManager
 {
@@ -96,6 +96,6 @@ class AdminManager
      */
     public function getServices(): array
     {
-        return ServicesEnums::getServices();
+        return MicroservicesEnums::getServices();
     }
 }
