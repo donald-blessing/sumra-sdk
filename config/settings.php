@@ -41,10 +41,10 @@ return [
      * Microservices API
      */
     'api' => [
-        'files' => env('API_FILES_URL', env('APP_URL', 'http://localhost:8080') . '/v1/files'),
-        'identity' => env('API_COMMUNICATIONS_URL', env('APP_URL', 'http://localhost:8200') . '/v1/users'),
-        'communications' => env('API_COMMUNICATIONS_URL', env('APP_URL', 'http://localhost') . '/v1/communications'),
-        'referrals' => env('API_REFERRALS_URL', env('APP_URL', 'http://localhost') . '/v1/referrals'),
+        'files' => env('API_FILES_URL', env('APP_URL') . '/v1/files'),
+        'identity' => env('API_IDENTITY_URL', env('APP_URL') . '/v1/users'),
+        'communications' => env('API_COMMUNICATIONS_URL', env('APP_URL') . '/v1/communications'),
+        'referrals' => env('API_REFERRALS_URL', env('APP_URL') . '/v1/referrals'),
     ],
 
     //'app_id' => "waiting-lists-ms-9009",
