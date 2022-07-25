@@ -1,9 +1,9 @@
 <?php
 
-namespace Sumra\SDK;
+namespace Sumra\SDK\Services;
 
+use Exception;
 use Illuminate\Support\Facades\DB;
-use mysql_xdevapi\Exception;
 use Sumra\SDK\Jobs\QueueJob;
 use Sumra\SDK\Models\PublisherMessage;
 
@@ -38,7 +38,7 @@ class PubSub
     /**
      * @var bool
      */
-    public $transaction;
+    public bool $transaction = false;
 
     /**
      * PubSub constructor.
@@ -59,14 +59,17 @@ class PubSub
      *
      * @return $this
      */
-    public function transaction(callable $callback) {
+    public function transaction(callable $callback)
+    {
         $this->transaction = true;
+
         DB::beginTransaction();
 
         try {
             $callback();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
+
             throw $e;
         }
 
@@ -80,24 +83,27 @@ class PubSub
      * @param $event
      * @param $message
      * @param null $queue
-     *
-     * @throws \Exception
+     * @param null $exchange
      */
-    public function publish($event, $message, $queue, $exchange=null) {
+    public function publish($event, $message, $queue, $exchange = null)
+    {
         try {
             $model = new $this->publisherModelClass;
             $model->uniq_id = uniqid('', true);
             $model->queue = $queue;
+            $model->exchange = $exchange ?? $queue;
             $model->event = $event;
-            $model->message =  $message;
+            $model->message = $message;
             $model->save();
-            if (!empty($this->transaction)) {
+
+            if ($this->transaction) {
                 DB::commit();
             }
-        } catch (\Exception $e) {
-            if (!empty($this->transaction)) {
+        } catch (Exception $e) {
+            if ($this->transaction) {
                 DB::rollBack();
             }
+
             throw $e;
         }
 
@@ -114,12 +120,14 @@ class PubSub
      *
      * @param QueueJob $job
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handle(QueueJob $job) {
+    public function handle(QueueJob $job)
+    {
         try {
             $message = $this->subscriberModelClass::where('uniq_id', $job->data['uniq_id'])->first();
             $time = time();
+
             if (empty($message)) {
                 $message = new $this->subscriberModelClass();
                 $message->fill($job->data);
@@ -131,16 +139,17 @@ class PubSub
                 // TODO If don't throw exception the queue extension send to rabbitmq ack and rabbitmq delete the message
                 //throw new \Exception();
                 $job->getJob()->markAsFailed();
-                $message->status=6;
+                $message->status = 6;
             }
 
             $message->save();
 
-            if($message->status != 6)
+            if ($message->status != 6) {
                 event($message->event, [$message->message]);
-
-        } catch (\Exception $e) {
+            }
+        } catch (Exception $e) {
             $job->getJob()->markAsFailed();
+
             throw $e;
         }
     }

@@ -4,7 +4,7 @@ namespace Sumra\SDK\Exceptions;
 
 use Illuminate\Support\Arr;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
-use Sumra\SDK\JsonApiResponse;
+use Sumra\SDK\Services\JsonApiResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
      * @param            $request
      * @param \Throwable $e
      *
-     * @return \Sumra\SDK\JsonApiResponse
+     * @return \Sumra\SDK\Services\JsonApiResponse
      */
     protected function prepareJsonResponse($request, Throwable $e)
     {

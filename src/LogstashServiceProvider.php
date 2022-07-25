@@ -4,10 +4,11 @@ namespace Sumra\SDK;
 
 use Illuminate\Support\ServiceProvider;
 use Monolog\Logger;
-use Sumra\SDK\Factories\LogstashHandleFactory;
+use Sumra\SDK\Services\Logstash\LogstashHandleFactory;
 
 /**
  * Class LogstashServiceProvider
+ *
  * Package for logstash logging
  *
  * @package Sumra\SDK
@@ -51,7 +52,6 @@ class LogstashServiceProvider extends ServiceProvider
 
         //    return $monolog;
         //});
-
     }
 
     /*public function getRotatingLogHandler($maxFiles = 7)
@@ -59,14 +59,4 @@ class LogstashServiceProvider extends ServiceProvider
         return (new RotatingFileHandler(storage_path('logs/lumen.log'), $maxFiles))
             ->setFormatter(new LineFormatter(null, null, true, true));
     }*/
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
 }

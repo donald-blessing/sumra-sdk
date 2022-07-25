@@ -44,15 +44,14 @@ return [
         'files' => [
             'host' => env('API_FILES_HOST', 'http://localhost:8080'),
             'version' => env('API_FILES_VERSION', '/v1')
-        ]
-    ],
-
-    /**
-     * RabbitMQ Exchange Points
-     */
-    'exchange_queue' => [
-        'files' => env('RABBITMQ_RECEIVER_FILES', 'FilesMS'),
-        'referrals' => env('RABBITMQ_RECEIVER_REFERRALS', 'ReferralsMS'),
-        'contacts_book' => env('RABBITMQ_RECEIVER_CONTACTS', 'ContactsBooksMS')
+        ],
+        'identity' => [
+           'host' => env('API_IDENTITY_HOST', 'http://localhost:8200'),
+           'version' => env('API_IDENTITY_VERSION', '/v1')
+        ],
+        'app_id' => "subscriptions-ms-9009",
+        //'app_id' => "waiting-lists-ms-9009",
+        'referrals_ms' => env('API_REFERRALS_HOST', 'http://localhost'),
+        'microservice' => env('MICROSERVICE', ''),
     ],
 ];

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sumra\SDK\Processor;
+namespace Sumra\SDK\Services\Logstash;
 
 use Monolog\Processor\ProcessorInterface;
 

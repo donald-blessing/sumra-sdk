@@ -4,18 +4,16 @@ namespace Sumra\SDK;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
+use Sumra\SDK\Services\AdminManager;
 
 class AdminManagerServiceProvider extends ServiceProvider
 {
-
-
     /**
      * Register the application services.
      *
      * @return void
      */
     public function register()
-
     {
         App::singleton('AdminManager', function () {
             return new AdminManager();
