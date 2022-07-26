@@ -41,10 +41,24 @@ return [
      * Microservices API
      */
     'api' => [
-        'files' => env('API_FILES_URL', env('APP_URL') . '/v1/files'),
-        'identity' => env('API_IDENTITY_URL', env('APP_URL') . '/v1/users'),
         'communications' => env('API_COMMUNICATIONS_URL', env('APP_URL') . '/v1/communications'),
+        'contacts_books' => env('API_CONTACTS_BOOKS_URL', env('APP_URL') . '/v1/contacts-book'),
+        'crypto_exchange' => env('API_CRYPTO_EXCHANGE_URL', env('APP_URL') . '/v1/exchanges'),
+        'crypto_wallets' => env('API_CRYPTO_WALLETS_URL', env('APP_URL') . '/v1/wallets'),
+        'faqs' => env('API_FAQS_URL', env('APP_URL') . '/v1/faqs'),
+        'files' => env('API_FILES_URL', env('APP_URL') . '/v1/files'),
+        'gmet' => env('API_GMET_URL', env('APP_URL') . '/v1/gmet'),
+        'identity' => env('API_IDENTITY_URL', env('APP_URL') . '/v1/users'),
+        'instant_credit_lines' => env('API_INSTANT_CREDIT_LINES_URL', env('APP_URL') . '/v1/credit-lines'),
+        'launchpad' => env('API_LAUNCHPAD_URL', env('APP_URL') . '/v1/launchpad'),
+        'news' => env('API_NEWS_URL', env('APP_URL') . '/v1/news'),
+        'notifications' => env('API_NOTIFICATIONS_URL', env('APP_URL') . '/v1/notifications'),
+        'payments' => env('API_PAYMENTS_URL', env('APP_URL') . '/v1/payments'),
+        'reference_books' => env('API_REFERENCE_BOOKS_URL', env('APP_URL') . '/v1/reference-books'),
         'referrals' => env('API_REFERRALS_URL', env('APP_URL') . '/v1/referrals'),
+        'subscriptions' => env('API_SUBSCRIPTIONS_URL', env('APP_URL') . '/v1/subscriptions'),
+//        'wealth_exchange' => env('API_WEALTH_EXCHANGE_URL', env('APP_URL') . '/'),
+//        'wealth_cards' => env('API_WEALTH_CARDS_URL', env('APP_URL') . '/'),
     ],
 
     //'app_id' => "waiting-lists-ms-9009",
