@@ -11,8 +11,6 @@ use Traversable;
 
 class JsonApiResponse extends JsonResponse
 {
-    protected array $included = [];
-
     /**
      * JsonApiResponse constructor.
      *
@@ -65,11 +63,9 @@ class JsonApiResponse extends JsonResponse
     {
         // If input data of Model
         if ($data instanceof Model) {
-            $output = [
+            return [
                 'data' => $this->serializeModel($data)
             ];
-
-            return $this->mergeIncluded($output);
         }
 
         // If input data of Paginator
@@ -92,10 +88,7 @@ class JsonApiResponse extends JsonResponse
             }
 
             // Processing array of data
-            $data = $this->serializeCollection($data);
-
-            // Add included and return
-            return $this->mergeIncluded($data);
+            return $this->serializeCollection($data);
         }
 
         // Return inputed data, e.g. string
@@ -111,49 +104,29 @@ class JsonApiResponse extends JsonResponse
      */
     protected function serializeModel(Model $data): array
     {
-        // TODO
-        $attributes = $data->attributesToArray();
+        // Get primary object
+        $result = $data->attributesToArray();
+        $result += [
+            'type' => $data->getTable()
+        ];
 
+        // TODO
         $relations = $data->getRelations();
-
-//        $result = [
-//            // The table can have different primary key
-//            // TODO Optimize
-//            'type' => $data->getTable(),
-//            'id' => $data->id,
-//            'attributes' => $attributes,
-//        ];
-
-        $result = $attributes;
-
-        // TODO
         if (!empty($relations)) {
             foreach ($relations as $key => $relation) {
-                // TODO Does the response contain pivot data?
+                // TODO Does the response contain pivot data
                 if ($relation instanceof Pivot) {
                     continue;
                 }
 
                 if (is_iterable($relation)) {
                     foreach ($this->serializeCollection($relation) as $key => $temp) {
-                        $this->addInclude($temp);
-
-                        $result['relationships'][$key]['data'][] = [
-                            'type' => $temp['type'],
-                            'id' => $temp['id'],
-                        ];
+                        $result['relationships'][$temp['type']][] = $temp;
                     }
                 } elseif ($relation instanceof Model) {
-                    $temp = $this->serializeModel($relation);
-
-                    $this->addInclude($temp);
-
-                    $result['relationships'][$key]['data'] = [
-                        'type' => $temp['type'],
-                        'id' => $temp['id'],
-                    ];
+                    $result['relationships'][$temp['type']] = $this->serializeModel($relation);
                 } elseif ($relation) {
-                    $this->addInclude($relation);
+                    //
                 }
             }
         }
@@ -183,41 +156,6 @@ class JsonApiResponse extends JsonResponse
         }
 
         return $result;
-    }
-
-    /**
-     * @param $include
-     *
-     * @todo
-     */
-    protected function addInclude($include)
-    {
-        $type = $include['type'];
-        $id = $include['id'];
-
-        if (!array_key_exists($type, $this->included) || !array_key_exists($id, $this->included[$type])) {
-            $this->included[$type][$id] = $include;
-        } else {
-            $this->included[$type][$id] = array_merge($this->included[$type][$id], $include);
-        }
-    }
-
-    /**
-     * @param $output
-     *
-     * @return mixed
-     */
-    protected function mergeIncluded($output)
-    {
-        foreach ($this->included as $items) {
-            foreach ($items as $key => $item) {
-                // The table can have different primary key
-                // TODO Optimize
-                $output['included'][] = $item;
-            }
-        }
-
-        return $output;
     }
 
     /**
