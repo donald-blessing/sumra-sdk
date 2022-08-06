@@ -2,6 +2,13 @@
     "name": "sumra/sdk",
     "description": "Microservices SDK. Utilities, Traits, Responses, Data exchange, Logging, etc",
     "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ihor Porokhnenko",
+            "email": "ihor.porokhnenko@gmail.com"
+        }
+    ],
     "require": {
         "php": "^8.0",
         "darkaonline/swagger-lume": "~9",
@@ -11,17 +18,10 @@
         "guzzlehttp/guzzle": "~5|~6|~7",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "~11"
     },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Ihor Porokhnenko",
-            "email": "ihor.porokhnenko@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Sumra\\SDK\\": "src"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
