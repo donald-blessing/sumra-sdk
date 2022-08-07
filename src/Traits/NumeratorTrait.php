@@ -26,7 +26,7 @@ trait NumeratorTrait
      */
     protected function getNumeratorPrefix(): string
     {
-        return 'DC';
+        return 'DOC';
     }
 
     /**
