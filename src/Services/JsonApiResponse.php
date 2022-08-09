@@ -106,9 +106,6 @@ class JsonApiResponse extends JsonResponse
     {
         // Get primary object
         $result = $data->attributesToArray();
-        $result += [
-            'type' => $data->getTable()
-        ];
 
         // TODO
         $relations = $data->getRelations();
@@ -121,10 +118,10 @@ class JsonApiResponse extends JsonResponse
 
                 if (is_iterable($relation)) {
                     foreach ($this->serializeCollection($relation) as $key => $temp) {
-                        $result['relationships'][$temp['type']][] = $temp;
+                        $result[$temp['type']][] = $temp;
                     }
                 } elseif ($relation instanceof Model) {
-                    $result['relationships'][$temp['type']] = $this->serializeModel($relation);
+                    $result[$key] = $this->serializeModel($relation);
                 } elseif ($relation) {
                     //
                 }
