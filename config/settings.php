@@ -42,7 +42,7 @@ return [
      */
     'api' => [
         'communications' => env('API_COMMUNICATIONS_URL', env('APP_URL') . '/v1/communications'),
-        'contacts_books' => env('API_CONTACTS_BOOKS_URL', env('APP_URL') . '/v1/contacts-book'),
+        'contacts_books' => env('API_CONTACTS_BOOKS_URL', env('APP_URL') . '/v1/contacts-books'),
         'crypto_exchange' => env('API_CRYPTO_EXCHANGE_URL', env('APP_URL') . '/v1/exchanges'),
         'crypto_wallets' => env('API_CRYPTO_WALLETS_URL', env('APP_URL') . '/v1/wallets'),
         'faqs' => env('API_FAQS_URL', env('APP_URL') . '/v1/faqs'),
