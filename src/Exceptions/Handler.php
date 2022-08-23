@@ -43,11 +43,11 @@ class Handler extends ExceptionHandler
     {
         parent::report($exception);
 
-        $telegram = new Telegram($exception);
-        $telegram->send();
-
-        $mailer = new Mailer($exception);
-        $mailer->send();
+//        $telegram = new Telegram($exception);
+//        $telegram->send();
+//
+//        $mailer = new Mailer($exception);
+//        $mailer->send();
     }
 
     /**
