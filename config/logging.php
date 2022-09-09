@@ -53,6 +53,12 @@ return [
             'channels' => ['daily'],
         ],
 
+        'telegram' => [
+            'driver' => 'custom',
+            'via'    => Logger\TelegramLogger::class,
+            'level'  => 'debug',
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/lumen.log'),
