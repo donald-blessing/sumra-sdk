@@ -55,8 +55,8 @@ return [
 
         'telegram' => [
             'driver' => 'custom',
-            'via'    => Logger\TelegramLogger::class,
-            'level'  => 'debug',
+            'via' => Sumra\SDK\Services\TelegramLog\TelegramLog::class,
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'single' => [

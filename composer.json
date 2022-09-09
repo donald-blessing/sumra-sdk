@@ -16,8 +16,7 @@
         "flipbox/lumen-generator": "~9",
         "fruitcake/laravel-cors": "~2",
         "guzzlehttp/guzzle": "~5|~6|~7",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "~11",
-        "grkamil/laravel-telegram-logging": "dev-master"
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "~11"
     },
     "autoload": {
         "psr-4": {
